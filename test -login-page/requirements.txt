@@ -1,0 +1,11 @@
+Flask==2.3.3
+Flask-SQLAlchemy==3.0.5
+Flask-CORS==4.0.0
+Flask-JWT-Extended==4.5.2
+Flask-Migrate==4.0.5
+Werkzeug==2.3.7
+python-dotenv==1.0.0
+
+# Database drivers (uncomment as needed)
+psycopg2-binary==2.9.7  # For PostgreSQL
+# PyMySQL==1.1.0           # For MySQL
