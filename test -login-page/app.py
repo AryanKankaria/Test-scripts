@@ -35,15 +35,6 @@ jwt = JWTManager(app)
 CORS(app)
 
 
-@app.before_request
-def init_db():
-    """Initialize database on first request"""
-    try:
-        db.create_all()
-    except Exception as e:
-        logger.error(f"Database initialization error: {e}")
-
-
 @app.route("/")
 def home():
     """Serve login page"""
