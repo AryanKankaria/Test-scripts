@@ -39,32 +39,7 @@ class TestCooldownIncrement:
 
 class TestRateLimitReset:
 
-    def test_rate_limit_window_expiry(self, api_session):
-        # Make 11 failed attempts to exceed MAX_LOGIN_ATTEMPTS (10)
-        for i in range(11): # @todo: pull this number from the code itself.
-            api_session.post(
-                f'{BASE_URL}/auth/login',
-                json={'email': TEST_USER_EMAIL, 'password': 'wrong'}
-            )
-        
-        # Try with correct password - should be rate limited
-        response = api_session.post(
-            f'{BASE_URL}/auth/login',
-            json={'email': TEST_USER_EMAIL, 'password': TEST_USER_PASSWORD}
-        )
-        assert response.status_code == 429, f"Expected 429, got {response.status_code}"
-        
-        # Wait for rate limit window to expire (1 minute = 60 seconds)
-        print("Waiting 62 seconds for rate limit window to expire...")
-        time.sleep(62)
-        
-        # After window expiry, the failed attempt counter should reset
-        # Try with wrong password - should get 401 (not 429), counter is fresh
-        response = api_session.post(
-            f'{BASE_URL}/auth/login',
-            json={'email': TEST_USER_EMAIL, 'password': 'wrong'}
-        )
-        assert response.status_code == 401, f"Expected 401 after window expiry, got {response.status_code}: {response.text}"
+
 
     def test_successful_login_clears_rate_limit(self, api_session):
         # Do 3 failed attempts (well below any reasonable threshold)

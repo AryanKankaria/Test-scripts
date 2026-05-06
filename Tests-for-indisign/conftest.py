@@ -5,6 +5,10 @@ from dotenv import load_dotenv
 import psycopg2
 from pathlib import Path
 
+
+def pytest_configure(config):
+    config.addinivalue_line('markers', 'slow: marks tests as slow due to server-side delays (deselect with -m "not slow")')
+
 load_dotenv()
 
 BASE_URL = os.getenv('BASE_URL', 'http://localhost:3000')

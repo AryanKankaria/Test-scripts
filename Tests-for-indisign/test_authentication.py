@@ -209,3 +209,29 @@ class TestAuthorizationErrors:
         response = api_session.get(f'{BASE_URL}/auth/verify')
         assert response.status_code == 401
 
+
+class TestFullLoginFlow:
+
+    def test_login_verify_logout_verify(self, api_session):
+        """Full cycle: login → session works → logout → session gone."""
+        # Step 1: login
+        login = api_session.post(
+            f'{BASE_URL}/auth/login',
+            json={'email': TEST_USER_EMAIL, 'password': TEST_USER_PASSWORD},
+        )
+        assert login.status_code == 200
+        assert 'sid' in api_session.cookies
+
+        # Step 2: session is valid
+        verify_before = api_session.get(f'{BASE_URL}/auth/verify')
+        assert verify_before.status_code == 200
+
+        # Step 3: logout
+        logout = api_session.post(f'{BASE_URL}/auth/logout')
+        assert logout.status_code == 200
+        assert logout.json().get('ok') is True
+
+        # Step 4: session is gone
+        verify_after = api_session.get(f'{BASE_URL}/auth/verify')
+        assert verify_after.status_code == 401
+
